@@ -2,6 +2,7 @@
 This code creates communication between a computer and a microprocessor over USB using Python, and then between the microprocessor and analog-digital convertor over I2C, using CircuitPython. This particular system uses ADS1115s from Adafruit, but it'd be pretty easy to swap them out.
 This is my first time uploading to Github so... lmk what I can improve but don't be mean please!
 Here's some more detail on the code.
+
 COMPUTER'S END:
 I will start with the user interface code here, as it's the base of everything else. Wait til the very end for the module and graphing code information!
 Using commands, you can request things from the microprocessors.
