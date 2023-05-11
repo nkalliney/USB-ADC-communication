@@ -66,7 +66,7 @@ If you want to change the commands your microprocessors respond to, you should d
 
 The last thing I want to mention are the processor interface module code and the continuous graphing code. The module code can be imported as module into any of your code, and calling its functions will be just like using the user interface, but all automated! The continuous graphing file graphs all the readings from all the differential channel lines with respect to time, with a beautiful scrolling display and a start and stop button.
 
-There were a lot of attributions for the code that I combined to make this project, and I don't know if I have to add them, but here are the links to my key influences. First and most importantly, though, I'd like to thank Mr. Greg Porter!
+There were a lot of attributions for the code that I combined to make this project, and I don't know if I have to add them, but here are the links to my key influences. First and most importantly, though, I'd like to thank Mr. Greg Porter for helping with the coding and Dr. Plaster for the inspiration and support for this project.
 
 https://learn.adafruit.com/welcome-to-circuitpython/overview
 
