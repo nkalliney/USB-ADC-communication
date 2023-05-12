@@ -1,4 +1,6 @@
 """
+This code is pretty much identical to the user interface code.
+
 This module can be used in any higher-level code that requires communicating with a microprocessor to ADC to ADS1115.
 -> import r_processor_interface_mod as pim
 
@@ -78,8 +80,6 @@ def send(command): # This filters commands based on whether or not they need a r
     # the command is readall, which requires a little more work on our end
     # and sends the response along to be printed
     com_parts = command.split(" ")
-    if len(com_parts) != 3: # if they did not provide a file name, add the default one
-        com_parts.append("data")
     if com_parts[0] != 'x': # if it is being sent to a processor...
         to_return  = send_to_processor(com_parts) # sends a command like ["1", "read11"]
     else:
