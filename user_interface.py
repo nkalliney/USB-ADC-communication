@@ -20,11 +20,12 @@ def write_then_response(com, ser):
     return response # then return it
 
 def write2(com, ser):
-    # this method sends a command and receives a response
+    # this method sends a command
     com = com + "\r" # add a \r to signify the end of the command
     ser.write(bytearray(com.encode())) # write the command
 
 def response2(ser):
+    # this reads a responds
     response = bg.response(ser).decode("utf-8") # wait for the response
     return response # then return it
 
@@ -45,46 +46,43 @@ def send_to_processor(com_parts):
     if processor_num not in serials:
         return "The processor you selected is not available."
     response = write_then_response(com_parts[1], serials[processor_num]) # get the response
-    if "read" in com_parts[1]: # if "read" in command, we want to save the response in a file.
-       write_data_into_file(com_parts[2], response)
     return response # return the response
 
 def other_commands(com_parts):
-    # commands that don't go directly to a processor
+    # commands that don't go directly to a signle processor
     com = com_parts[1] # get the command
     if com == "info": # respond to info
         print(instructions)
         print(command_list)
-        return "No response required from processor." # break out before we write to a file since we don't need to
-    elif com == "readall": # if we want to read all of them
+        return "No response required from processor."
+    elif com == "readall": # if we want to read all of the channels
         to_return = readall(com_parts)
-    file_name = com_parts[2]
-    write_data_into_file(file_name, to_return)
     return to_return
 
-def command_manager(): # This filters commands based on whether or not they need a response, or if
+def command_manager(): # This filters commands based on whether or not they need a response from a microprocessor, or if
     # the command is readall, which requires a little more work on our end
     # and sends the response along to be printed
     user_input = input("Enter a command.\n")
     com_parts = user_input.split(" ")
-    if len(com_parts) != 3: # if they did not provide a file name, add the default one
-        com_parts.append("data")
-    if com_parts[0] != 'x':
+    if com_parts[0] != 'x': # if the microprocessor ID is not x, it goes to a specific microporcessor
         to_return  = send_to_processor(com_parts)
     else:
         to_return = other_commands(com_parts)
+    if len(com_parts) == 3: # if they provided a file name, write to file
+        write_data_into_file(com_parts[2], to_return)
     return to_return
 
 
 def readall(com_parts):
+    # writing the command and listening for a response is split up here 
+    # is to save time since the microprocessors take some time to get the readings and 
+    # we want them all doing that at once instead of waiting for each one in turn
     data_string = ''
     for serial in serials:
         write2("readmpall", serials[serial])
     for serial in serials:
         data = response2(serials[serial])
         data_string+=data
-    return data_string
-    write_data_into_file(com_parts[2], data_string)
     return data_string
 
 print(instructions)
