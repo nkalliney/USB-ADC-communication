@@ -4,6 +4,7 @@ import serial
 import adafruit_board_toolkit.circuitpython_serial
 
 def setup_serials():
+    #get the data comports
     comports = adafruit_board_toolkit.circuitpython_serial.data_comports()
     if not comports:
         raise Exception("No CircuitPython boards found")
@@ -25,11 +26,12 @@ def response(ser): # wait for a response on designated serial line
     reply = b''
     start = time.time()
     while True:
-        #if (time.time()-start) > 0.02:    #debug greg
+        #add this in if you want but be careful about your timing! It can create issues
+        #if (time.time()-start) > 0.02:   
         #    raise Exception("We have timed out waiting for a response!")  #debug greg
-        if ser.in_waiting > 0:
+        if ser.in_waiting > 0: # if there's a new char...
             a = ser.read()
-            if a == b'\r':
+            if a == b'\r': #end the message if it is this
                 return reply
-            else:
+            else: # or keep adding to the current message
                 reply += a
