@@ -1,5 +1,3 @@
-# Write your code here :-)
-# Write your code here :-)
 import time
 import board
 import neopixel
@@ -11,7 +9,7 @@ adc_dict = {}
 chan_dict = {}
 ordered_ids = []
 adc_to_address = {}
-my_id = 0 # processor specific
+my_id = -1 # This will be changed in code.py
 chan_to_pins = {}
 
 def setup_dicts(i2c_freq=100000, adc_data_rate=128, adc_gain=1):
@@ -35,9 +33,13 @@ def setup_dicts(i2c_freq=100000, adc_data_rate=128, adc_gain=1):
 
     i2c = busio.I2C(board.SCL, board.SDA, frequency=i2c_freq)
     # Create the ADC objects using the I2C bus
+    # Each ADC can have one of four addresses, so this attempts to create all 4
     try:
+        #address:
         ad = 0x48
+        # This ADC id is unique for this processor
         adc_id = "0"
+        # This creates the actual ADC object
         ads0 = ADS.ADS1115(i2c, data_rate=adc_data_rate, gain=adc_gain, address = ad)
         adc_dict[adc_id] = ads0
         adc_to_address[adc_id] = ad
@@ -73,13 +75,15 @@ def setup_dicts(i2c_freq=100000, adc_data_rate=128, adc_gain=1):
 
     keys = sorted(adc_dict) # make sure we're doing everything in the order it was added in, which is ascending order
     for adc_id in keys:
+        #create the actual differential channel between pins 0 and 1
         chan = AnalogIn(adc_dict[adc_id], ADS.P0, ADS.P1)
         id1 = adc_id + str(0) # create the ID manually
+        #create the differential channel between pins 2 and 3
         chan2 = AnalogIn(adc_dict[adc_id], ADS.P2, ADS.P3)
         id2 = adc_id + str(1) # create the ID manually
         chan_dict[id1] = chan # add it to the dictionary right now
         chan_dict[id2] = chan2
-
+        #Attach the pins to the IDs in a dictionary
         chan_to_pins[id1] = "0 1"
         chan_to_pins[id2] = "2 3"
 
