@@ -1,6 +1,4 @@
-# Demo showing how to plot data live with Python GUI interface
-
-#matplotlib.use('TkAgg')
+# most of this I didn't write- see the youtube video in the credits
 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
