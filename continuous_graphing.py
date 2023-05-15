@@ -1,4 +1,4 @@
-# most of this I didn't write- see the youtube video in the credits
+# most of this I didn't write tbh- see the youtube video in the credits
 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
@@ -13,13 +13,12 @@ import numpy as np
 import random
 
 
-serials = bg.setup_serials() #establish serial lines. This dictionary is in the format "num" : serialobject
+serials = bg.setup_serials() #establish serial lines. This dictionary is in the format "ID" : serialobject
 all_readings = {} # keeps track of all of the data points we've collected
 time_list = [] # keeps track of all the times we've collected data
 start_time = time.time()
 cond = False # whether we are plotting or not
 lines = [] # These will hold all the line objects that go on the plot
-
 
 def write_then_response(com, ser):
     # this method sends a command and receives a response
@@ -34,7 +33,6 @@ def readall():
         data = write_then_response("readmpall", serials[serial]) # ask for a reading on every detector
         data_string += data # add it to our running total
     return data_string
-
 
 def add_to_list(li, val):
     if li != None: # if the list exists
@@ -58,9 +56,6 @@ def process_data(result, now):
         all_readings[sp[0]] = add_to_list(all_readings.get(sp[0]), sp[1])
         # the above line finds the list that in the all_readings dictionary corresponds to the ID
         # whether it is None or not. It then sets the list to itself with the new value added.
-        print('sp[0]= ' + str(sp[0]) + ', sp[1]= ' + str(sp[1]))
-        if len(sp) > 2:
-            print('sp[2]= ' + str(sp[2]))
         i = i+1
     time_list = add_to_list(time_list, now-start_time) # add the current time to the list as well
 
