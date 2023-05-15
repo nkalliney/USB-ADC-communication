@@ -4,7 +4,8 @@ import serial
 import adafruit_board_toolkit.circuitpython_serial
 
 def setup_serials():
-    #get the data comports
+    #get the data comports names- this works for windows or mac!
+    #I understand there may be issues with Linux with serial communication (check your permissions)
     comports = adafruit_board_toolkit.circuitpython_serial.data_comports()
     if not comports:
         raise Exception("No CircuitPython boards found")
