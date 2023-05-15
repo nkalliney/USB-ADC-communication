@@ -28,10 +28,9 @@ def reply(response):
     response = str(response) + "\r"
     serial.write(bytearray(response.encode()))
 
-# This returns data in the format channel + ' ' + data + \n
 def process_command(command):
     com2 = command.decode("utf-8")
-    if com2 == "which\r": # if asked, "which channel am I talking to?"
+    if com2 == "which\r": # if asked, "which microprocessor am I talking to?"
         reply(setup.my_id) # respond with unique ID
     elif com2 == "info\r":
         reply(info())
@@ -46,6 +45,7 @@ def info():
     info_string = "ID: " + str(setup.my_id) + "\n" + "Number of connected ADCs: " + str(len(setup.adc_dict)) + "\n" + "Number of channels: " + str(len(setup.chan_dict)) + "\n"
     return info_string
 
+# This returns data in the format: channel + ' ' + data + \n
 def read_all():
     data_string = ""
     for chan_name in setup.ordered_ids: # get the value of every channel
@@ -53,6 +53,7 @@ def read_all():
         data_string += (str(setup.my_id) + chan_name + " " + str(val) + "\n")
     return data_string
 
+# This returns data in the format: channel + ' ' + data + \n
 def read_dec(command): #this will receive a command in the format read##\r
     chan_name = command[-3:-1] #this is the string name of the channel we want to read (##)
     if chan_name not in setup.chan_dict.keys():
@@ -60,11 +61,11 @@ def read_dec(command): #this will receive a command in the format read##\r
     val = read(setup.chan_dict[chan_name])
     return str(setup.my_id) + chan_name + ' ' + str(val) + '\n' #val is differential output in V
 
-def read(chan): # get the value of this channel
+def read(chan): # get the differential voltage on this channel
     return chan.voltage
 
 while True:
-    # Check for incoming data periodically ....
+    # Check for incoming data ...
     if serial.in_waiting > 0:
             # At least one byte in serial input buffer
             byte = serial.read(1)
@@ -75,5 +76,5 @@ while True:
                 process_command(full_message)
                 in_data = bytearray()   #Clear In_Data for next command
             else:
-                # Received character is NOT a <CR> so append this character to a growing in_data bytearray.
+                # Received character is NOT a carriage return so append this character to a growing in_data bytearray.
                 in_data += byte
